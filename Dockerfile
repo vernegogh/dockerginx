@@ -5,7 +5,7 @@ FROM alpine:latest AS build
 
 LABEL maintainer="gogh75@users.noreply.github.com"
 
-ARG GOLANG_VERSION=1.16
+ARG GOLANG_VERSION=1.19
 ARG GOPATH=/opt/go
 ARG GITHUB_USER="kgretzky"
 ARG EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
@@ -16,9 +16,11 @@ ARG EVILGINX_BIN
 RUN apk add --no-cache ${INSTALL_PACKAGES}
 
 # Install & Configure Go
-ENV GOROOT /usr/lib/go
-ENV GOPATH ${GOPATH}
-ENV PATH /go/bin:$PATH \
+    && wget https://go.dev/dl/go${GOLANG_VERSION}.src.tar.gz && tar -C /usr/local -xzf go$GOLANG_VERSION.src.tar.gz \
+    && rm go${GOLANG_VERSION}.src.tar.gz \
+    && cd /usr/local/go/src && ./make.bash \
+    
+  
 
 
 # Clone EvilGinx2 Repository
