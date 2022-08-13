@@ -9,7 +9,7 @@ ARG GOLANG_VERSION=1.19
 ARG GOPATH=/opt/go
 ARG GITHUB_USER="kgretzky"
 ARG EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
-ARG INSTALL_PACKAGES="go git bash make musl-dev"
+ARG INSTALL_PACKAGES="golang-go git bash make musl-dev"
 ARG PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
 ARG EVILGINX_BIN
 
@@ -21,10 +21,6 @@ RUN set -ex \
     && wget https://go.dev/dl/go${GOLANG_VERSION}.src.tar.gz && tar -C /usr/local -xzf go$GOLANG_VERSION.src.tar.gz \
     && rm go${GOLANG_VERSION}.src.tar.gz \
     && cd /usr/local/go/src && ./make.bash \
-    
-  
-
-
 # Clone EvilGinx2 Repository
     && mkdir -pv ${GOPATH}/src/github.com/${GITHUB_USER} \
     && git -C ${GOPATH}/src/github.com/${GITHUB_USER} clone https://${EVILGINX_REPOSITORY}
