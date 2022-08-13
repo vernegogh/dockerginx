@@ -1,7 +1,7 @@
 ARG EVILGINX_BIN="/bin/evilginx"
 
 # Stage 1 - Build EvilGinx2 app
-FROM alpine:latest AS build
+FROM ubuntu:20.04
 
 LABEL maintainer="gogh75@users.noreply.github.com"
 
@@ -13,7 +13,8 @@ ARG INSTALL_PACKAGES="go git bash make musl-dev"
 ARG PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
 ARG EVILGINX_BIN
 
-RUN apk add --no-cache ${INSTALL_PACKAGES}
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get -y install ${INSTALL_PACKAGES}
 
 # Install & Configure Go
 RUN set -ex \
@@ -56,7 +57,7 @@ RUN set -x \
     && mkdir -v /app && cp -vr phishlets /app
 
 # Stage 2 - Build Runtime Container
-FROM alpine:latest
+FROM ubuntu:20.04
 
 LABEL maintainer="gogh75@users.noreply.github.com"
 
