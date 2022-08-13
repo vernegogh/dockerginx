@@ -17,7 +17,7 @@ RUN apk add --no-cache ${INSTALL_PACKAGES}
 
 # Install & Configure Go
 ENV GOROOT /usr/lib/go
-ENV GOPATH /go
+ENV GOPATH ${GOPATH}
 ENV PATH /go/bin:$PATH \
 
 
