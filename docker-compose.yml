@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: evilginx2
     ports:
-      - 80:80/tcp
+      - 8081:80/tcp
       - 8443:443/tcp
       - 53:53/udp
     command: ["/bin/bash"]
