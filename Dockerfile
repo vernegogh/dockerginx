@@ -16,6 +16,7 @@ ARG EVILGINX_BIN
 RUN apk add --no-cache ${INSTALL_PACKAGES}
 
 # Install & Configure Go
+RUN set -ex \
     && wget https://go.dev/dl/go${GOLANG_VERSION}.src.tar.gz && tar -C /usr/local -xzf go$GOLANG_VERSION.src.tar.gz \
     && rm go${GOLANG_VERSION}.src.tar.gz \
     && cd /usr/local/go/src && ./make.bash \
