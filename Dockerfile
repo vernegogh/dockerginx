@@ -9,17 +9,18 @@ ARG GOLANG_VERSION=1.16
 ARG GOPATH=/opt/go
 ARG GITHUB_USER="kgretzky"
 ARG EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
-ARG INSTALL_PACKAGES="go git bash"
+ARG INSTALL_PACKAGES="go git bash make musl-dev"
 ARG PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
 ARG EVILGINX_BIN
 
 RUN apk add --no-cache ${INSTALL_PACKAGES}
 
 # Install & Configure Go
-RUN set -ex \
-    && wget https://dl.google.com/go/go${GOLANG_VERSION}.src.tar.gz && tar -C /usr/local -xzf go$GOLANG_VERSION.src.tar.gz \
-    && rm go${GOLANG_VERSION}.src.tar.gz \
-    && cd /usr/local/go/src && ./make.bash \
+ENV GOROOT /usr/lib/go
+ENV GOPATH /go
+ENV PATH /go/bin:$PATH
+
+
 # Clone EvilGinx2 Repository
     && mkdir -pv ${GOPATH}/src/github.com/${GITHUB_USER} \
     && git -C ${GOPATH}/src/github.com/${GITHUB_USER} clone https://${EVILGINX_REPOSITORY}
