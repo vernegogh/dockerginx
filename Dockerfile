@@ -18,7 +18,7 @@ RUN apk add --no-cache ${INSTALL_PACKAGES}
 # Install & Configure Go
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
-ENV PATH /go/bin:$PATH
+ENV PATH /go/bin:$PATH \
 
 
 # Clone EvilGinx2 Repository
