@@ -5,10 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: evilginx2
+    container_name: dockerginx
     ports:
-      - 8081:80/tcp
-      - 8443:443/tcp
+      - 80:80/tcp
+      - 443:443/tcp
       - 53:53/udp
     command: ["/bin/bash"]
     #command: ["/bin/evilginx", "-p", "/app/phishlets", "-debug", "-developer"]
