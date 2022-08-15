@@ -1,4 +1,4 @@
-FROM golang:alpine
+FROM golang:alpine AS build
 
 ARG BUILD_RFC3339="1970-01-01T00:00:00Z"
 ARG COMMIT="local"
@@ -8,7 +8,7 @@ ENV GITHUB_USER="kgretzky"
 ENV EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
 ENV INSTALL_PACKAGES="git make gcc musl-dev"
 ENV PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
-ENV EVILGINX_BIN="/bin/evilginx"
+ENV EVILGINX_BIN=
 
 # Clone EvilGinx2 Repository
 RUN mkdir -p ${GOPATH}/src/github.com/${GITHUB_USER} \
@@ -51,7 +51,8 @@ RUN apk add --no-cache bash && mkdir -v /app
 
 # Install EvilGinx2
 WORKDIR /app
-COPY --from=build /go/src/github.com/kgretzky/evilginx2/bin/evilginx /app/evilginx
+
+COPY --from=build ${EVILGINX_BIN} ${EVILGINX_BIN}
 COPY --from=build /app .
 
 VOLUME ["/app/phishlets/"]
