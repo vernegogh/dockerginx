@@ -60,11 +60,10 @@ VOLUME ["/app/phishlets/"]
 
 COPY ./docker-entrypoint.sh /opt/
 RUN chmod +x /opt/docker-entrypoint.sh
-		
-ENTRYPOINT ["/opt/docker-entrypoint.sh"]
+
 # Configure Runtime Container
 EXPOSE ${EVILGINX_PORTS}
 
 STOPSIGNAL SIGKILL
 
-CMD [${EVILGINX_BIN}, "-p", "/app/phishlets"]
+ENTRYPOINT ["/opt/docker-entrypoint.sh"]
