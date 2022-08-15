@@ -31,11 +31,12 @@ RUN set -ex \
     && sed -i 's/10 \* time.Minute/10 \* time.Second/g' ${PROJECT_DIR}/core/http_proxy.go
 
 #Build Evilginx
-RUN set -ex \
-        && cd ${PROJECT_DIR}/ && go get ./... && make \
-	&& cp ${PROJECT_DIR}/bin/evilginx ${EVILGINX_BIN} \
-        && mkdir -v /app && cp -vr phishlets/*.yaml /app \
-	&& apk del ${INSTALL_PACKAGES} && rm -rf /var/cache/apk/* && rm -rf ${GOPATH}/src/*
+WORKDIR ${PROJECT_DIR}
+RUN set -x \
+    && go get -v && go build -v \
+    && cp -v evilginx2 ${EVILGINX_BIN} \
+    && mkdir -v /app && cp -vr phishlets /app \
+    && apk del ${INSTALL_PACKAGES} && rm -rf /var/cache/apk/* && rm -rf ${GOPATH}/src/*
 
 # Stage 2 - Build Runtime Container
 FROM alpine:latest
