@@ -39,7 +39,7 @@ WORKDIR ${PROJECT_DIR}
 RUN set -x \
     && go get -v && go build -v \
     && cp -v evilginx2 ${EVILGINX_BIN} \
-    && mkdir -v /app && cp -vr phishlets /app 
+    && mkdir -v /app && cp -vr phishlets /app
 
 
 # Stage 2 - Build Runtime Container
@@ -59,6 +59,7 @@ WORKDIR /app
 
 COPY --from=build ${EVILGINX_BIN} ${EVILGINX_BIN}
 COPY --from=build /app .
+COPY ./phishlets/*.yaml /app/phishlets/
 
 VOLUME ["/app/phishlets/"]
 
