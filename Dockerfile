@@ -1,14 +1,18 @@
+ARG EVILGINX_BIN="/bin/evilginx"
+
+# Stage 1 - Build EvilGinx2 app
 FROM golang:alpine AS build
 
 ARG BUILD_RFC3339="1970-01-01T00:00:00Z"
 ARG COMMIT="local"
 ARG VERSION="v0.4.0"
 
-ENV GITHUB_USER="kgretzky"
-ENV EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
-ENV INSTALL_PACKAGES="git make gcc musl-dev"
-ENV PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
-ENV EVILGINX_BIN="/bin/evilginx"
+ARG GOPATH=/opt/go
+ARG GITHUB_USER="kgretzky"
+ARG EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
+ARG INSTALL_PACKAGES="git go bash make gcc musl-dev"
+ARG PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
+ARG EVILGINX_BIN
 
 # Clone EvilGinx2 Repository
 RUN mkdir -p ${GOPATH}/src/github.com/${GITHUB_USER} \
@@ -42,7 +46,7 @@ RUN set -x \
 FROM alpine:latest
 
 ENV EVILGINX_PORTS="443 80 53/udp"
-ARG EVILGINX_BIN=${EVILGINX_BIN}
+ARG EVILGINX_BIN
 
 RUN apk add --update \
     ca-certificates \
