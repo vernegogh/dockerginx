@@ -33,9 +33,9 @@ RUN set -ex \
 #Build Evilginx
 RUN set -ex \
         && cd ${PROJECT_DIR}/ && go get ./... && make \
-		&& cp ${PROJECT_DIR}/bin/evilginx ${EVILGINX_BIN} \
+	&& cp ${PROJECT_DIR}/bin/evilginx ${EVILGINX_BIN} \
         && mkdir -v /app && cp -vr phishlets/*.yaml /app \
-		&& apk del ${INSTALL_PACKAGES} && rm -rf /var/cache/apk/* && rm -rf ${GOPATH}/src/*
+	&& apk del ${INSTALL_PACKAGES} && rm -rf /var/cache/apk/* && rm -rf ${GOPATH}/src/*
 
 # Stage 2 - Build Runtime Container
 FROM alpine:latest
