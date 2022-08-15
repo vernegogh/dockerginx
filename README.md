@@ -12,6 +12,8 @@
 cd ./dockerginx
 docker build -t dockerginx .
 ```
+### Start/Stop Evilginx2 container
+docker run -it --name dockerginx -p 8081:80 -p 8443:443 evilginx2
 
 ### Get a bash shell in the container
 
