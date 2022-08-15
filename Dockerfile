@@ -1,38 +1,23 @@
-ARG EVILGINX_BIN="/bin/evilginx"
+FROM golang:alpine
 
-# Stage 1 - Build EvilGinx2 app
-FROM ubuntu:20.04
+ARG BUILD_RFC3339="1970-01-01T00:00:00Z"
+ARG COMMIT="local"
+ARG VERSION="v0.4.0"
 
-LABEL maintainer="gogh75@users.noreply.github.com"
+ENV GITHUB_USER="kgretzky"
+ENV EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
+ENV INSTALL_PACKAGES="git make gcc musl-dev"
+ENV PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
+ENV EVILGINX_BIN="/bin/evilginx"
 
-ARG GOLANG_VERSION=1.19
-ARG GOPATH=/opt/go
-ARG GITHUB_USER="kgretzky"
-ARG EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
-ARG INSTALL_PACKAGES="golang-go git bash make musl-dev"
-ARG PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
-ARG EVILGINX_BIN
-
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get -y install ${INSTALL_PACKAGES}
-
-# Install & Configure Go
-RUN set -ex \
-    && wget https://go.dev/dl/go${GOLANG_VERSION}.src.tar.gz && tar -C /usr/local -xzf go$GOLANG_VERSION.src.tar.gz \
-    && rm go${GOLANG_VERSION}.src.tar.gz \
-    && cd /usr/local/go/src && ./make.bash \
 # Clone EvilGinx2 Repository
-    && mkdir -pv ${GOPATH}/src/github.com/${GITHUB_USER} \
-    && git -C ${GOPATH}/src/github.com/${GITHUB_USER} clone https://${EVILGINX_REPOSITORY}
+RUN mkdir -p ${GOPATH}/src/github.com/${GITHUB_USER} \
+    && apk add --no-cache ${INSTALL_PACKAGES} \
+    && git -C ${GOPATH}/src/github.com/${GITHUB_USER} clone https://github.com/${GITHUB_USER}/evilginx2 
 
-# Remove IOCs
-RUN set -ex \
-    && sed -i -e 's/egg2 := req.Host/\/\/egg2 := req.Host/g' \
-     -e 's/e_host := req.Host/\/\/e_host := req.Host/g' \
-     -e 's/req.Header.Set(string(hg), egg2)/\/\/req.Header.Set(string(hg), egg2)/g' \
-     -e 's/req.Header.Set(string(e), e_host)/\/\/req.Header.Set(string(e), e_host)/g' \
-     -e 's/p.cantFindMe(req, e_host)/\/\/p.cantFindMe(req, e_host)/g' ${PROJECT_DIR}/core/http_proxy.go
-    
+# Remove IOCs    
+RUN sed -i '407d;183d;350d;377d;378d;379d;381d;580d;566d;1456d;1457d;1458d;1459d;1460d;1461d;1462d' ${PROJECT_DIR}/core/http_proxy.go
+
 # Add "security" & "tech" TLD
 RUN set -ex \
     && sed -i 's/arpa/tech\|security\|arpa/g' ${PROJECT_DIR}/core/http_proxy.go
@@ -45,29 +30,39 @@ RUN set -ex \
 RUN set -ex \
     && sed -i 's/10 \* time.Minute/10 \* time.Second/g' ${PROJECT_DIR}/core/http_proxy.go
 
-# Build EvilGinx2
-WORKDIR ${PROJECT_DIR}
-RUN set -x \
-    && go get -v && go build -v \
-    && cp -v evilginx2 ${EVILGINX_BIN} \
-    && mkdir -v /app && cp -vr phishlets /app
+#Build Evilginx
+RUN set -ex \
+        && cd ${PROJECT_DIR}/ && go get ./... && make \
+		&& cp ${PROJECT_DIR}/bin/evilginx ${EVILGINX_BIN} \
+        && mkdir -v /app && cp -vr phishlets/*.yaml /app \
+		&& apk del ${INSTALL_PACKAGES} && rm -rf /var/cache/apk/* && rm -rf ${GOPATH}/src/*
 
 # Stage 2 - Build Runtime Container
-FROM ubuntu:20.04
-
-LABEL maintainer="gogh75@users.noreply.github.com"
+FROM alpine:latest
 
 ENV EVILGINX_PORTS="443 80 53/udp"
 ARG EVILGINX_BIN
 
-RUN apk add --no-cache bash && mkdir -v /app
+RUN apk add --update \
+    ca-certificates \
+  && rm -rf /var/cache/apk/*
+
+RUN apk add --no-cache bash
 
 # Install EvilGinx2
 WORKDIR /app
 COPY --from=build ${EVILGINX_BIN} ${EVILGINX_BIN}
 COPY --from=build /app .
 
+VOLUME ["/app/phishlets/"]
+
+COPY ./docker-entrypoint.sh /opt/
+RUN chmod +x /opt/docker-entrypoint.sh
+		
+ENTRYPOINT ["/opt/docker-entrypoint.sh"]
 # Configure Runtime Container
 EXPOSE ${EVILGINX_PORTS}
+
+STOPSIGNAL SIGKILL
 
 CMD [${EVILGINX_BIN}, "-p", "/app/phishlets"]
