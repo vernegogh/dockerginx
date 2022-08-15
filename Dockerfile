@@ -8,7 +8,7 @@ ENV GITHUB_USER="kgretzky"
 ENV EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
 ENV INSTALL_PACKAGES="git make gcc musl-dev"
 ENV PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
-ENV EVILGINX_BIN=
+ENV EVILGINX_BIN="/bin/evilginx"
 
 # Clone EvilGinx2 Repository
 RUN mkdir -p ${GOPATH}/src/github.com/${GITHUB_USER} \
@@ -42,7 +42,7 @@ RUN set -x \
 FROM alpine:latest
 
 ENV EVILGINX_PORTS="443 80 53/udp"
-ARG EVILGINX_BIN
+ARG EVILGINX_BIN=${EVILGINX_BIN}
 
 RUN apk add --update \
     ca-certificates \
