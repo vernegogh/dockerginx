@@ -47,11 +47,11 @@ RUN apk add --update \
     ca-certificates \
   && rm -rf /var/cache/apk/*
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash && mkdir -v /app
 
 # Install EvilGinx2
 WORKDIR /app
-COPY --from=build COPY --from=build /go/src/github.com/kgretzky/evilginx2/bin/evilginx /app/evilginx
+COPY --from=build ${EVILGINX_BIN} ${EVILGINX_BIN}
 COPY --from=build /app .
 
 VOLUME ["/app/phishlets/"]
