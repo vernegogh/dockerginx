@@ -16,7 +16,7 @@ docker build -t dockerginx .
 ### Get a bash shell in the container
 
 ```shell
-docker exec -it dockerginx /bin/bash
+docker exec -it evilginx2 /bin/bash
 ```
 
 ### Run Evilginx2 in the running container using developer and debug mode
