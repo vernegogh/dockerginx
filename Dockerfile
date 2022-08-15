@@ -35,8 +35,8 @@ WORKDIR ${PROJECT_DIR}
 RUN set -x \
     && go get -v && go build -v \
     && cp -v evilginx2 ${EVILGINX_BIN} \
-    && mkdir -v /app && cp -vr phishlets /app \
-    && apk del ${INSTALL_PACKAGES} && rm -rf /var/cache/apk/* && rm -rf ${GOPATH}/src/*
+    && mkdir -v /app && cp -vr phishlets /app 
+
 
 # Stage 2 - Build Runtime Container
 FROM alpine:latest
