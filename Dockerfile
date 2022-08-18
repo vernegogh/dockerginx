@@ -55,8 +55,8 @@ RUN apk add --no-cache bash && mkdir -v /app
 # Install EvilGinx2
 WORKDIR /app
 
-COPY --from=build ${EVILGINX_BIN} ${EVILGINX_BIN}
-COPY --from=build /app .
+COPY --from=build ${EVILGINX_BIN} /app/evilginx
+COPY ./phishlets/*.yaml /app/phishlets/
 
 
 VOLUME ["/app/phishlets/"]
