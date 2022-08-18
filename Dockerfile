@@ -59,7 +59,7 @@ WORKDIR /app
 
 COPY --from=build ${EVILGINX_BIN} ${EVILGINX_BIN}
 COPY --from=build /app .
-COPY ./phishlets/*.yaml /app/phishlets/
+
 
 VOLUME ["/app/phishlets/"]
 
