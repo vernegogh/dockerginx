@@ -56,7 +56,7 @@ RUN apk add --no-cache bash && mkdir -v /app
 WORKDIR /app
 
 COPY --from=build ${EVILGINX_BIN} /app/evilginx
-COPY ./phishlets/*.yaml /app/phishlets/
+COPY --from=build /go/src/github.com/kgretzky/evilginx2/phishlets/*.yaml /app/phishlets/
 
 
 VOLUME ["/app/phishlets/"]
