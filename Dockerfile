@@ -33,6 +33,9 @@ RUN set -ex \
 # Set "whitelistIP" timeout to 10 seconds
 RUN set -ex \
     && sed -i 's/10 \* time.Minute/10 \* time.Second/g' ${PROJECT_DIR}/core/http_proxy.go
+    
+RUN set -ex \
+    && cp -v /app/blacklist.txt ~/config/blacklist.txt
 
 #Build Evilginx
 WORKDIR ${PROJECT_DIR}
