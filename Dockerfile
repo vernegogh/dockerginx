@@ -47,7 +47,7 @@ FROM alpine:latest
 ENV EVILGINX_PORTS="443 80 53/udp"
 ARG EVILGINX_BIN
 
-RUN apk add --update \
+RUN apk add --update && apk add nano \
     ca-certificates \
   && rm -rf /var/cache/apk/*
 
