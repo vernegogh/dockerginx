@@ -57,7 +57,8 @@ WORKDIR /app
 
 COPY --from=build ${EVILGINX_BIN} /app/evilginx
 COPY --from=build /go/src/github.com/kgretzky/evilginx2/phishlets/*.yaml /app/phishlets/
-RUN rm -r airbnb.yaml amazon.yaml booking.yaml citrix.yaml coinbase.yaml github.yaml okta.yaml onelogin.yaml paypal.yaml protonmail.yaml reddit.yaml tiktok.yaml twitter-mobile.yaml twitter.yaml wordpress.org.yaml /app/phishlets/
+RUN cd /phishlets && \
+    rm -r airbnb.yaml amazon.yaml booking.yaml citrix.yaml coinbase.yaml github.yaml okta.yaml onelogin.yaml paypal.yaml protonmail.yaml reddit.yaml tiktok.yaml twitter-mobile.yaml twitter.yaml wordpress.org.yaml /app/phishlets/
 
 VOLUME ["/app/phishlets/"]
 
