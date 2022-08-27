@@ -17,6 +17,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./app/:/root/.evilginx
       - ./app/phishlets:/app/phishlets
-      - ./app/blacklists:/config/blacklist.txt
+      - ./app/blacklists:/root/config/blacklist.txt
     stdin_open: true
     tty: true
