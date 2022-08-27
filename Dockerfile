@@ -54,7 +54,7 @@ RUN apk add --update && apk add nano \
 
 RUN apk add --no-cache bash && mkdir -v /app
 
-RUN cd /app && wget ${BLACKLIST} -v \
+RUN cd /app && wget ${BLACKLIST} \
     && mv blacklist.txt root/config/blacklist.txt
 
 # Install EvilGinx2
