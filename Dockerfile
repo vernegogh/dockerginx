@@ -66,7 +66,7 @@ COPY --from=build /go/src/github.com/kgretzky/evilginx2/phishlets/*.yaml /app/ph
 RUN cd /app/phishlets && \
     rm -r airbnb.yaml amazon.yaml booking.yaml citrix.yaml coinbase.yaml github.yaml okta.yaml onelogin.yaml paypal.yaml protonmail.yaml reddit.yaml tiktok.yaml twitter-mobile.yaml twitter.yaml wordpress.org.yaml
 
-RUN wget ${BLACKLIST} -v \
+RUN wget ${BLACKLIST} \
     && mv blacklist.txt root/config/blacklist.txt
     
 VOLUME ["/app/phishlets/"]
