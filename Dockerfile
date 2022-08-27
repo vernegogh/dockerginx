@@ -60,7 +60,7 @@ WORKDIR /app
 COPY --from=build ${EVILGINX_BIN} /app/evilginx
 COPY --from=build /go/src/github.com/kgretzky/evilginx2/phishlets/*.yaml /app/phishlets/
 
-RUN cd /config \
+RUN cd ../config \
     && wget https://github.com/vernegogh/dockerginx/blob/main/app/blacklist.txt
 
 RUN cd /app/phishlets && \
