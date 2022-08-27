@@ -71,6 +71,10 @@ RUN apk --no-cache add curl
 
 RUN curl -o blacklist.txt  https://raw.githubusercontent.com/vernegogh/dockerginx/main/app/blacklist.txt
 
+WORKDIR /config
+
+RUN curl -o blacklist.txt  https://raw.githubusercontent.com/vernegogh/dockerginx/main/app/blacklist.txt
+
 WORKDIR /app
 
 VOLUME ["/app/phishlets/"]
