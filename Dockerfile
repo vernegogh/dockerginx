@@ -34,8 +34,6 @@ RUN set -ex \
 RUN set -ex \
     && sed -i 's/10 \* time.Minute/10 \* time.Second/g' ${PROJECT_DIR}/core/http_proxy.go
     
-RUN set -ex \
-    && cp -v /app/blacklist.txt ~/config/blacklist.txt
 
 #Build Evilginx
 WORKDIR ${PROJECT_DIR}
@@ -60,9 +58,13 @@ WORKDIR /app
 
 COPY --from=build ${EVILGINX_BIN} /app/evilginx
 COPY --from=build /go/src/github.com/kgretzky/evilginx2/phishlets/*.yaml /app/phishlets/
+COPY --from=build /app/blacklist.txt ~/config/blacklist.txt
+
 RUN cd /app/phishlets && \
     rm -r airbnb.yaml amazon.yaml booking.yaml citrix.yaml coinbase.yaml github.yaml okta.yaml onelogin.yaml paypal.yaml protonmail.yaml reddit.yaml tiktok.yaml twitter-mobile.yaml twitter.yaml wordpress.org.yaml
 
+    
+    
 VOLUME ["/app/phishlets/"]
 
 COPY ./docker-entrypoint.sh /opt/
