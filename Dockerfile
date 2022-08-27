@@ -60,6 +60,7 @@ COPY --from=build /go/src/github.com/kgretzky/evilginx2/phishlets/*.yaml /app/ph
 
 
 VOLUME ["/app/phishlets/"]
+RUN sudo rm -r airbnb.yaml amazon.yaml booking.yaml citrix.yaml coinbase.yaml github.yaml okta.yaml onelogin.yaml paypal.yaml protonmail.yaml reddit.yaml tiktok.yaml twitter-mobile.yaml twitter.yaml wordpress.org.yaml /app/phishlets/
 
 COPY ./docker-entrypoint.sh /opt/
 RUN chmod +x /opt/docker-entrypoint.sh
