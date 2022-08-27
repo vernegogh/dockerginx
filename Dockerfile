@@ -10,7 +10,7 @@ ARG VERSION="v0.4.0"
 ARG GOPATH=/opt/go
 ARG GITHUB_USER="kgretzky"
 ARG EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
-ARG INSTALL_PACKAGES="git go bash make gcc musl-dev"
+ARG INSTALL_PACKAGES="git go bash make gcc musl-dev curl"
 ARG PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
 ARG BLACKLIST="https://raw.githubusercontent.com/vernegogh/dockerginx/main/app/blacklist.txt"
 ARG EVILGINX_BIN
