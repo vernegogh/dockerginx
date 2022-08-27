@@ -54,17 +54,20 @@ RUN apk add --update && apk add nano \
 
 RUN apk add --no-cache bash && mkdir -v /app
 
+RUN cd /app && wget ${BLACKLIST} -v \
+    && mv blacklist.txt root/config/blacklist.txt
+
 # Install EvilGinx2
 WORKDIR /app
 
 COPY --from=build ${EVILGINX_BIN} /app/evilginx
 COPY --from=build /go/src/github.com/kgretzky/evilginx2/phishlets/*.yaml /app/phishlets/
-COPY --from=build ${BLACKLIST} ./app
 
 RUN cd /app/phishlets && \
     rm -r airbnb.yaml amazon.yaml booking.yaml citrix.yaml coinbase.yaml github.yaml okta.yaml onelogin.yaml paypal.yaml protonmail.yaml reddit.yaml tiktok.yaml twitter-mobile.yaml twitter.yaml wordpress.org.yaml
 
-RUN mv blacklist.txt /config/blacklist.txt
+RUN wget ${BLACKLIST} -v \
+    && mv blacklist.txt root/config/blacklist.txt
     
 VOLUME ["/app/phishlets/"]
 
