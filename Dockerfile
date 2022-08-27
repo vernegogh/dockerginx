@@ -12,7 +12,7 @@ ARG GITHUB_USER="kgretzky"
 ARG EVILGINX_REPOSITORY="github.com/${GITHUB_USER}/evilginx2"
 ARG INSTALL_PACKAGES="git go bash make gcc musl-dev"
 ARG PROJECT_DIR="${GOPATH}/src/${EVILGINX_REPOSITORY}"
-ARG BLACKLIST="github.com/vernegogh/dockerginx/app/blacklist.txt"
+ARG BLACKLIST="https://github.com/vernegogh/dockerginx/blob/main/app/blacklist.txt"
 ARG EVILGINX_BIN
 
 # Clone EvilGinx2 Repository
@@ -59,13 +59,16 @@ WORKDIR /app
 
 COPY --from=build ${EVILGINX_BIN} /app/evilginx
 COPY --from=build /go/src/github.com/kgretzky/evilginx2/phishlets/*.yaml /app/phishlets/
-COPY --from=build ${BLACKLIST} /config/blacklist.txt
+
+RUN cd /config \
+    && wget https://github.com/vernegogh/dockerginx/blob/main/app/blacklist.txt
 
 RUN cd /app/phishlets && \
     rm -r airbnb.yaml amazon.yaml booking.yaml citrix.yaml coinbase.yaml github.yaml okta.yaml onelogin.yaml paypal.yaml protonmail.yaml reddit.yaml tiktok.yaml twitter-mobile.yaml twitter.yaml wordpress.org.yaml
     
     
 VOLUME ["/app/phishlets/"]
+
 
 COPY ./docker-entrypoint.sh /opt/
 RUN chmod +x /opt/docker-entrypoint.sh
