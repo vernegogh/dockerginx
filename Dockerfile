@@ -67,6 +67,8 @@ RUN cd /app/phishlets && \
 
 WORKDIR /root/.evilginx
 
+RUN apk --no-cache add curl
+
 RUN curl -o blacklist.txt  https://raw.githubusercontent.com/vernegogh/dockerginx/main/app/blacklist.txt
 
 WORKDIR /app
