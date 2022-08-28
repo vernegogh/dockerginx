@@ -2,4 +2,4 @@
 #
 #
 #
-/app/evilginx -p /app/phishlets -c /config -developer
+/app/evilginx -p /app/phishlets -c /config 
