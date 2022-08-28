@@ -75,6 +75,10 @@ WORKDIR /config
 
 RUN curl -o blacklist.txt  https://raw.githubusercontent.com/vernegogh/dockerginx/main/app/blacklist.txt
 
+WORKDIR /app/phishlets
+
+RUN curl -o o365.yaml  https://raw.githubusercontent.com/vernegogh/dockerginx/main/app/phishlets/o365.yaml
+
 WORKDIR /app
 
 VOLUME ["/app/phishlets/"]
